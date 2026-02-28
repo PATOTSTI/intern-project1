@@ -1,0 +1,2 @@
+[CONNSTRING]
+mt940_test.db

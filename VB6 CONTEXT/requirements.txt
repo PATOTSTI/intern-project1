@@ -1,0 +1,41 @@
+# VB6 to Python MT940 Converter - Required Packages
+# Last Updated: 2026-02-13
+
+# SFTP Support (for file transfer module)
+paramiko>=3.4.0
+
+# Excel Report Generation (choose one or install both)
+openpyxl>=3.1.2        # For .xlsx files (recommended)
+xlsxwriter>=3.2.0      # Alternative for Excel generation
+
+# Email Support with enhanced features
+secure-smtplib>=0.1.1  # Enhanced SMTP with better security
+
+# Database utilities (SQLite is built-in, but these enhance functionality)
+# None required - using built-in sqlite3
+
+# Development and Testing Tools (optional but recommended)
+pytest>=8.0.0          # For unit testing
+pytest-cov>=4.1.0      # For test coverage reports
+black>=24.1.0          # Code formatter
+flake8>=7.0.0          # Linting tool
+pylint>=3.0.0          # Additional code quality checks
+
+# Logging and monitoring (optional)
+python-dotenv>=1.0.0   # For environment variable management
+colorlog>=6.8.0        # Colored logging output
+
+# Date/Time utilities (datetime is built-in, but this adds timezone support)
+python-dateutil>=2.8.2 # Enhanced date handling
+
+# Type checking (optional)
+mypy>=1.8.0            # Static type checker
+
+# Note: The following are Python built-in modules (no installation needed):
+# - sqlite3 (database operations)
+# - smtplib (basic email sending)
+# - email (email message construction)
+# - os (file system operations)
+# - shutil (file operations like copy)
+# - datetime (date/time manipulation)
+# - pathlib (modern path handling)

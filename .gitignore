@@ -1,0 +1,85 @@
+# VB6 to Python MT940 Converter - Git Ignore File
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Database Files (Development)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Output Files
+output/
+logs/
+*.log
+
+# Build & Distribution
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Reports
+pylint_report.txt
+flake8_report.txt
+mypy_report.txt
+coverage_report/
+
+# Excel Files (Generated)
+*.xlsx
+*.xls
+
+# SFTP Keys
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+
+# Backup Files
+*.bak
+*.backup
+*~.txt
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Configuration (keep templates)
+config.ini
+!config.ini.template
+
+# Temporary Files
+*.tmp
+temp/
+tmp/

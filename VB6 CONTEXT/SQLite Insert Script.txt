@@ -1,0 +1,84 @@
+-- =========================================
+-- MT940 TEST DATA SEED SCRIPT
+-- =========================================
+
+-- =========================================
+-- 1. MT940
+-- =========================================
+INSERT INTO MT940 
+(statementacctno, counter, recipient_swift_bic, date, code, sendingType, filename, extension_type, company, daily, format, uploadPath, field86_flag)
+VALUES
+('001190000001', 1, 'AUBKPHMMXXX', '2026-02-10', 'AUBKPHMMXXX', '2', NULL, '.txt', 'TESTCO', '1', 'A', 'C:\UPLOAD\TESTCO\', 'Y'),
+('001190000002', 1, 'AUBKPHMMXXX', '2026-02-10', 'AUBKPHMMXXX', '1', NULL, '.txt', 'TESTCO', '1', 'A', 'C:\UPLOAD\TESTCO\', 'Y'),
+('001190000003', 1, 'AUBKPHMMXXX', '2026-02-10', 'AUBKPHMMXXX', '2', NULL, '.txt', 'TESTCO', '1', 'A', 'C:\UPLOAD\TESTCO\', 'N');
+
+
+-- =========================================
+-- 2. historyfile1_copy
+-- =========================================
+INSERT INTO historyfile1_copy
+(acctno, branchno, txnseqno, txncode, mnem_code, txntype, txn_date, txn_time, valuedate, txnamt, ledger_bal, avail_bal, refno, passbk_recno, tellerid, superid, delete_flag, acq_branch, reconrefno)
+VALUES
+('001190000001', '001', '1', 'DEP', 'CASHDEP', 'C', '2026-02-10', '090000', '2026-02-10', '5000.00', '15000.00', '15000.00', 'REF001', '1', 'T01', 'S01', 'N', '001', NULL),
+('001190000001', '001', '2', 'WDL', 'CASHWDL', 'D', '2026-02-10', '100000', '2026-02-10', '2000.00', '13000.00', '13000.00', 'REF002', '2', 'T01', 'S01', 'N', '001', NULL),
+('001190000002', '001', '1', 'DEP', 'CASHDEP', 'C', '2026-02-10', '090000', '2026-02-10', '10000.00', '20000.00', '20000.00', 'SWIFT001', '1', 'T01', 'S01', 'N', '001', NULL),
+('001190000002', '001', '2', 'WDL', 'CASHWDL', 'D', '2026-02-10', '110000', '2026-02-10', '3000.00', '17000.00', '17000.00', 'SWIFT002', '2', 'T01', 'S01', 'N', '001', NULL);
+
+
+-- =========================================
+-- 3. acctmstr_copy
+-- =========================================
+INSERT INTO acctmstr_copy
+(accountno, ledger_bal, available_bal)
+VALUES
+('001190000003', '25000.00', '25000.00');
+
+
+-- =========================================
+-- 4. acctmstrbefclr_copy
+-- =========================================
+INSERT INTO acctmstrbefclr_copy
+(accountno, ledger_bal, available_bal)
+VALUES
+('001190000003', '25000.00', '25000.00');
+
+
+-- =========================================
+-- 5. casaSwiftTrancodeMap
+-- =========================================
+INSERT INTO casaSwiftTrancodeMap (mnem_code, swift_trancode)
+VALUES
+('CASHDEP', 'NMSC'),
+('CASHWDL', 'NMSC');
+
+
+-- =========================================
+-- 6. tlf_copy
+-- =========================================
+INSERT INTO tlf_copy
+(acctno, txncode, mnem_code, txntype, txnamt, refno, bill_reference)
+VALUES
+('001190000001', 'DEP', 'CASHDEP', 'C', '5000.00', 'REF001', 'BILLREF001'),
+('001190000001', 'WDL', 'CASHWDL', 'D', '2000.00', 'REF002', 'BILLREF002'),
+('001190000002', 'DEP', 'CASHDEP', 'C', '10000.00', 'SWIFT001', 'BILLREF003'),
+('001190000002', 'WDL', 'CASHWDL', 'D', '3000.00', 'SWIFT002', 'BILLREF004');
+
+
+-- =========================================
+-- 7. codetable
+-- =========================================
+INSERT INTO codetable
+(emailtag, emailsched, emailreport, emailrecipient, sentflag, emailrecipientcc)
+VALUES
+('Y', 'daily', 'MT940', 'test@example.com', '0', 'cc@example.com'),
+('Y', 'daily', 'MT940 for 001190000001', 'acct1@example.com', '0', 'cc1@example.com'),
+('Y', 'daily', 'MT940 for 001190000002', 'acct2@example.com', '0', 'cc2@example.com');
+
+
+-- =========================================
+-- 8. MT940_summary_rep (for testing view)
+-- =========================================
+INSERT INTO MT940_summary_rep (data, code, refnum, date)
+VALUES
+(':60F:C260210PHP10000,00', 'AUBKPHMMXXX', ':20:89260210001190000001', 'February 10, 2026'),
+(':62F:C260210PHP13000,00', 'AUBKPHMMXXX', ':20:89260210001190000001', 'February 10, 2026');

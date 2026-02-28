@@ -1,0 +1,282 @@
+AI MIGRATION CONTEXT GUIDE
+VB6 → Python (SQLite) Conversion Project
+🔷 Project Background
+
+This project involves migrating a legacy VB6 codebase into modern Python.
+The system is old and rarely modified. The output files are sent to external partners.
+
+Primary Goal
+
+Preserve exact functionality and business logic while improving:
+
+Readability
+
+Maintainability
+
+Structure
+
+Behavior must remain identical unless explicitly improving internal structure without altering outputs.
+
+🔷 Supervisor Requirements
+
+Study and fully understand VB6 modules before translating.
+
+Perform incremental (part-by-part) migration.
+
+Focus on:
+
+Database utilization (ADODB → sqlite3)
+
+File reading and writing
+
+Email sending functionality
+
+Data conversion logic
+
+Optimize logic where appropriate using dictionaries.
+
+Ensure Python code:
+
+Is readable and maintainable
+
+Uses parameterized SQL queries
+
+Closes database connections properly
+
+Uses try/except for meaningful error handling
+
+Avoids unnecessary overengineering
+
+Preserve original behavior exactly.
+
+🔷 Core Migration Rules
+
+❌ Do NOT translate line-by-line blindly.
+
+✅ Translate logic and intent.
+
+✅ Keep behavior identical unless explicitly improving internal structure.
+
+✅ Separate responsibilities into logical Python modules:
+
+main.py
+database.py
+models.py
+utils.py
+email_sender.py
+
+🔷 Code Cleanliness & Refactoring Standards (Humanized Code Rules)
+
+The generated Python code must:
+
+1️⃣ Avoid AI-Style Overengineering
+
+No unnecessary abstractions
+
+No excessive defensive programming
+
+No redundant helper functions
+
+No overly generic wrappers
+
+Keep solutions proportional to the task
+
+2️⃣ Use Natural, Human Naming
+
+Short, meaningful function names
+
+No verbose academic-style naming
+
+Avoid overly generic names like process_data_functionality_handler
+
+Example:
+
+❌ calculate_user_data_processing()
+✅ process_users()
+
+3️⃣ Keep Functions Focused and Short
+
+Avoid large 80+ line functions
+
+Break logic into small, readable units
+
+Each function should have one responsibility
+
+4️⃣ Remove Redundant Comments
+
+Do NOT write comments that explain obvious code.
+
+❌
+
+# Loop through the list
+for user in users:
+
+5️⃣ Write Human-Style Comments (Explain WHY, Not WHAT)
+
+Comments should:
+
+Explain intent
+
+Clarify business logic
+
+Mention constraints from VB6 behavior
+
+Sound natural and practical
+
+✅ Example:
+
+# VB6 trims trailing spaces before saving — keeping same behavior here
+
+
+✅ Example:
+
+# We only send emails if the export file was created successfully
+
+
+Avoid textbook-style comments.
+
+6️⃣ Allow Natural Developer Notes (When Appropriate)
+
+Small natural notes are acceptable:
+
+# TODO: confirm if partner still requires this legacy format
+
+# Keeping this structure to match VB6 output exactly
+
+
+These should feel realistic, not artificial.
+
+7️⃣ Remove AI Smells
+
+The final output must NOT:
+
+Repeat the obvious
+
+Contain overly formal documentation blocks
+
+Over-explain trivial logic
+
+Use unnecessarily complex patterns
+
+Include excessive docstrings for simple functions
+
+8️⃣ Ensure Developer Ownership
+
+The generated Python code must:
+
+Be easy to explain line-by-line
+
+Be modifiable without confusion
+
+Avoid hidden complexity
+
+Prioritize clarity over cleverness
+
+If logic is complex, simplify structure while preserving behavior.
+
+🔷 Per-File Migration Process
+PHASE 1 – Analysis
+
+For each VB6 file:
+
+Explain what the file does section-by-section
+
+Identify:
+
+Database usage
+
+File handling
+
+Email logic
+
+Data conversion
+
+Summarize execution flow clearly
+
+Highlight business rules that must remain unchanged
+
+PHASE 2 – Python Translation
+
+Use sqlite3 for database
+
+Use parameterized SQL queries
+
+Close connections properly
+
+Use with open() for file handling
+
+Use smtplib and email.message if email logic exists
+
+Replace long Select Case with dictionaries
+
+Use try/except with meaningful error handling
+
+Avoid global state where possible
+
+Keep code runnable
+
+Add human-style comments explaining intent
+
+PHASE 3 – Documentation
+
+For each translated module, create documentation including:
+
+Original VB6 file purpose
+
+Python equivalent file
+
+Key functions
+
+Database tables used
+
+Inputs and outputs
+
+Improvements made (if any internal refactoring occurred)
+
+Notes for future maintainers
+
+Explicit statement confirming preserved behavior
+
+🔷 Coding Standards
+
+Clear, concise function names
+
+No duplicated logic
+
+Proper separation of concerns
+
+Minimal global variables
+
+Clean, structured layout
+
+Consistent formatting
+
+No unnecessary abstraction layers
+
+Keep implementation straightforward and readable
+
+🔷 Behavior Preservation Policy
+
+Output files must remain byte-consistent unless explicitly improved.
+
+Database logic must preserve business rules.
+
+Email logic must maintain original trigger conditions.
+
+Data formatting must match legacy expectations.
+
+When in doubt:
+
+Match VB6 behavior over Python elegance.
+
+🔷 Final Objective
+
+Produce a clean, maintainable, human-readable Python version of the legacy VB6 system that:
+
+Preserves exact business functionality
+
+Avoids AI-generated code smells
+
+Looks like it was written thoughtfully by a competent developer
+
+Can be confidently maintained by future engineers
