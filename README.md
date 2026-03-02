@@ -1,127 +1,45 @@
-# VB6 to Python MT940 Converter
+# MT940 SWIFT Statement Generator
 
-**Project**: Legacy VB6 to Modern Python Migration  
-**Status**: ✅ **PRODUCTION READY**  
-**Completion Date**: February 20, 2026  
-**Developer**: Vincent (Intern)
+A Python conversion of a legacy VB6 system that generates SWIFT MT940 bank statement files and delivers them by email. Converted by Vincent (OJT Intern), March 2026.
 
 ---
 
-## 📋 Project Overview
+## What It Does
 
-This project successfully converted a legacy VB6 MT940 statement generation system to modern Python, preserving 100% of the original business logic while improving maintainability and following modern best practices.
-
-**Key Results**:
-- ✅ 5 core modules implemented
-- ✅ 50 functions converted
-- ✅ 104+ tests passing
-- ✅ Full system operational
-- ✅ 100% VB6 logic preserved
+Reads daily transaction records from a SQLite database, generates a properly formatted MT940 text file for each configured bank account, and sends the file to the recipient via email.
 
 ---
 
-## 🚀 Quick Start
+## Program Flow
 
-**All project files are located in the `Conversion/` folder.**
-
-👉 **[Go to Conversion/README.md](Conversion/README.md)** for complete documentation and quick start guide.
-
-### Main Application Location
 ```
-Conversion/
-├── Python_Modules/          ← Core application code
-├── Test_Scripts/            ← Testing scripts
-├── Database_Config/         ← Configuration files
-└── Documentation/           ← All documentation
+python main.py
+    │
+    ├── 1. Prompt for processing date (YYYYMMDD)
+    ├── 2. Connect to SQLite database
+    ├── 3. Check if already processed today → skip if yes
+    ├── 4. Load all accounts from MT940 table
+    │
+    └── 5. For each account:
+            ├── Pick processor based on account type
+            │     ├── Meralco  (code = MRALPHMMXXX)
+            │     ├── Converge (format = B)
+            │     ├── SWIFT    (sendingType = 1)
+            │     └── Standard (all others)
+            │
+            ├── Query transactions for the date
+            ├── Write MT940 file → C:\MT940\Output\YYYYMMDD\
+            └── Send file by email
 ```
 
-### Run the System
+---
+
+## How to Run
+
 ```bash
 cd Conversion/Python_Modules
 python main.py
 ```
 
----
-
-## 📁 Project Structure
-
-```
-VB6-PYTHON/
-├── Conversion/              ← Main project folder (see Conversion/README.md)
-│   ├── Python_Modules/      (5 core modules)
-│   ├── Test_Scripts/         (Testing tools)
-│   ├── Database_Config/      (Configuration)
-│   └── Documentation/        (All docs)
-│
-├── venv/                    ← Virtual environment (regenerate with: python -m venv venv)
-├── requirements.txt         ← Python dependencies
-├── .gitignore              ← Git ignore rules
-└── README.md               ← This file
-```
-
----
-
-## 📚 Documentation
-
-All documentation is located in the `Conversion/` folder:
-
-- **[Conversion/README.md](Conversion/README.md)** - Main project documentation
-- **[Conversion/CONVERSION_REPORT.md](Conversion/CONVERSION_REPORT.md)** - Complete conversion story (for management/handover)
-- **[Conversion/CODE_STUDY_GUIDE.md](Conversion/CODE_STUDY_GUIDE.md)** - Technical deep-dive (for developers)
-- **[Conversion/GMAIL_TESTING_GUIDE.md](Conversion/GMAIL_TESTING_GUIDE.md)** - Testing instructions
-
----
-
-## 🛠️ Setup
-
-### Prerequisites
-- Python 3.8 or higher
-- SQLite3 (included with Python)
-
-### Installation
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# Windows PowerShell:
-.\venv\Scripts\Activate.ps1
-# Windows CMD:
-venv\Scripts\activate.bat
-# Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
----
-
-## ✅ Compliance
-
-All migration rules followed:
-- ✅ Use sqlite3 for database
-- ✅ Use "with open" for files
-- ✅ Use try/except for errors
-- ✅ Parameterized SQL queries
-- ✅ Use dictionaries (not Select Case)
-- ✅ Modular architecture
-- ✅ Document VB6 line references
-- ✅ Preserve business logic
-
-**Overall Compliance**: **100%** ✅
-
----
-
-## 📞 Support
-
-For detailed information, see:
-- **Quick Start**: [Conversion/README.md](Conversion/README.md)
-- **Technical Details**: [Conversion/CODE_STUDY_GUIDE.md](Conversion/CODE_STUDY_GUIDE.md)
-- **Deployment Guide**: [Conversion/CONVERSION_REPORT.md](Conversion/CONVERSION_REPORT.md)
-
----
-
-**Last Updated**: February 18, 2026  
-**Version**: 1.0 (Production Release)  
-**Status**: ✅ COMPLETE
+Requires Python 3.8+ and the SQLite database file placed in `Conversion/Database_Config/`.  
+See `Conversion/Documentation/HANDOVER_GUIDE.md` for full setup instructions.
