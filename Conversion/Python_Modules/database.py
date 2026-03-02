@@ -66,17 +66,25 @@ def execute_query(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Opt
 
 
 def fetch_one(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Optional[sqlite3.Row]:
-    cursor = execute_query(conn, sql, params)
-    if cursor:
+    """Run a read query and return a single row. Does NOT commit."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql, params)
         return cursor.fetchone()
-    return None
+    except Exception as e:
+        print(f"ERROR in fetch_one: {e}")
+        return None
 
 
 def fetch_all(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> List[sqlite3.Row]:
-    cursor = execute_query(conn, sql, params)
-    if cursor:
+    """Run a read query and return all rows. Does NOT commit."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql, params)
         return cursor.fetchall()
-    return []
+    except Exception as e:
+        print(f"ERROR in fetch_all: {e}")
+        return []
 
 
 # ---------------------------------------------------------------------------

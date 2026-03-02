@@ -29,6 +29,10 @@ from utils import format_date_yyyymmdd
 
 APP_VERSION = "1.0.0"
 
+# Fallback date used only if run_mt940_process() is called programmatically without a date.
+# In normal operation, the operator always provides the date via prompt_processing_date().
+DEFAULT_PREV_BUS_DATE = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+
 
 def prompt_processing_date() -> datetime:
     """
