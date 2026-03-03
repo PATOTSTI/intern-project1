@@ -1,5 +1,3 @@
-""" test_all_modules.py — Single comprehensive test for the MT940 system. """
-
 import sys
 import os
 import inspect

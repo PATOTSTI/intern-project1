@@ -1,5 +1,3 @@
-""" Check what SMTP configuration Python actually sees """
-
 import sys
 import os
 
