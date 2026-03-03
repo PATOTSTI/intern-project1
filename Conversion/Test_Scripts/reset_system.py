@@ -1,16 +1,3 @@
-"""
-reset_system.py — Single consolidated reset script for MT940 testing
-
-Combines:
-  - full_reset.py       : delete output files + reset DB counters and sentflags
-  - reset_sentflag.py   : quick sentflag-only reset
-  - fix_main_sentflag.py: ensure main MT940 codetable record exists
-  - setup_test_email.py : configure a test email recipient in the database
-
-Usage:
-  python Test_Scripts\\reset_system.py
-"""
-
 import sys
 import os
 import glob

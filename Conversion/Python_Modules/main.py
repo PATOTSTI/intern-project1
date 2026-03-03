@@ -1,8 +1,3 @@
-"""
-Main entry point — orchestrates MT940 file generation and email delivery.
-Replaces VB6 cmdauto_MT940_Click() event handler (Lines 1-172).
-"""
-
 import os
 import sys
 from datetime import datetime
@@ -50,13 +45,6 @@ def prompt_processing_date() -> datetime:
 
 
 def run_mt940_process(prev_bus_date: Optional[datetime] = None) -> bool:
-    """
-    Full MT940 processing run:
-      1. Connect to DB
-      2. Check sentflag and transaction data — bail early if already done
-      3. Clear summary table
-      4. Loop accounts → route to correct processor → email/SFTP
-    """
     if prev_bus_date is None:
         prev_bus_date = DEFAULT_PREV_BUS_DATE
 

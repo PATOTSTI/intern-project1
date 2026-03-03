@@ -1,8 +1,3 @@
-"""
-Email sender — handles all MT940 email delivery.
-Replaces VB6 vbSendMail component (sendMail function, Lines 187-267).
-"""
-
 import os
 import smtplib
 import sqlite3
@@ -35,11 +30,6 @@ SEND_AS_HTML = True
 # ---------------------------------------------------------------------------
 
 def get_email_recipients(conn: sqlite3.Connection, account_no: str) -> Optional[Tuple[str, str, str]]:
-    """
-    Look up the email recipient for a given MT940 account.
-    Returns (recipient, cc, sentflag) or None if not configured.
-    VB6: rsrecipient2.Open — queries codetable by 'MT940 for {account_no}'.
-    """
     try:
         sql = """
             SELECT emailrecipient, emailrecipientcc, sentflag
@@ -66,10 +56,6 @@ def get_email_recipients(conn: sqlite3.Connection, account_no: str) -> Optional[
 
 
 def update_sent_flag(conn: sqlite3.Connection, account_no: str) -> bool:
-    """
-    Mark an account's MT940 email as sent so we don't resend on the same day.
-    VB6: UPDATE codetable SET sentflag = '1' WHERE emailreport like 'MT940 for {account_no}'
-    """
     try:
         sql = "UPDATE codetable SET sentflag = '1' WHERE emailreport LIKE ?"
         cursor = conn.cursor()
@@ -104,10 +90,6 @@ def _parse_addresses(address_string: str) -> list:
 
 
 def _clean_attachment_path(attachment: str) -> str:
-    """
-    Strip leading semicolons from attachment paths.
-    Added by KC 04/08/2014 in VB6 to handle malformed path strings like ";c:\\file.txt".
-    """
     if not attachment:
         return ""
     s = attachment.strip()
@@ -129,9 +111,6 @@ def send_mail(recipient: str, cc_recipient: str, subject: str,
     """
     Send an MT940 file by email.
     Mirrors VB6 sendMail(recipientEmail, ccEmail, subjectEmail, messageEmail, attachmentEmail).
-
-    Supports multiple recipients and CC addresses (semicolon-delimited).
-    Attachment paths are cleaned of legacy semicolon artifacts before attaching.
     """
     try:
         recipient_list = _parse_addresses(recipient)

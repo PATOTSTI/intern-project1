@@ -1,12 +1,3 @@
-"""
-MT940 processor — generates SWIFT MT940 statement files.
-Four variants mirror the original VB6 functions exactly:
-  process_mt940_new      → ProcessMT940New       (Lines 1501-1876)
-  process_mt940_meralco  → ProcessMT940New_Meralco (Lines 311-657)
-  process_mt940_converge → ProcessMT940_Converge  (Lines 659-998)
-  process_mt940_swift    → ProcessMT940Swift      (Lines 1001-1499)
-"""
-
 import os
 import sys
 from datetime import datetime
@@ -41,10 +32,6 @@ from utils import (
 # ---------------------------------------------------------------------------
 
 def _bal_line(tag: str, stmdate2: str, currency: str, amount: float) -> str:
-    """
-    Format a balance field line (e.g. ':60F:C240918PHP1234,56').
-    Uses D for negative balances, C for zero or positive — matches VB6 behavior.
-    """
     if amount < 0:
         return f":{tag}:D{stmdate2}{currency}{format_mt940_amount(abs(amount))}"
     return f":{tag}:C{stmdate2}{currency}{format_mt940_amount(amount)}"
@@ -70,13 +57,6 @@ def _resolve_bill_ref(raw) -> str:
 
 def process_mt940_new(conn, counter: int, account_no: str, code: str,
                       prev_bus_date: datetime) -> Optional[str]:
-    """
-    Standard MT940 file generator — the main variant used for most accounts.
-    VB6: ProcessMT940New (Lines 1501-1876)
-
-    Header format: {1:F01AUBKPHMMAXXX...}{2:I940...}
-    No-movement source: acctmstr_copy
-    """
     try:
         config = get_account_config(conn, account_no)
         if not config:
@@ -227,16 +207,6 @@ def process_mt940_new(conn, counter: int, account_no: str, code: str,
 
 def process_mt940_meralco(conn, counter: int, account_no: str, code: str,
                           prev_bus_date: datetime) -> Optional[str]:
-    """
-    Meralco-specific MT940 generator.
-    VB6: ProcessMT940New_Meralco (Lines 311-657)
-
-    Differences from standard:
-    - Header blocks REVERSED: {1:I940...}{2:F01AUBKPHMMAXXX...}
-    - No-movement source: acctmstrbefclr_copy (not acctmstr_copy)
-    - Writes :64: available balance in no-movement case
-    - :86: uses bill_reference from tlf_copy JOIN
-    """
     try:
         config = get_account_config(conn, account_no)
         if not config:
@@ -372,17 +342,6 @@ def process_mt940_meralco(conn, counter: int, account_no: str, code: str,
 
 def process_mt940_converge(conn, counter: int, account_no: str, code: str,
                            prev_bus_date: datetime) -> Optional[str]:
-    """
-    Converge-specific MT940 generator.
-    VB6: ProcessMT940_Converge (Lines 659-998)
-
-    Differences from Meralco:
-    - Header is standard order (same as process_mt940_new)
-    - No-movement source: acctmstrbefclr_copy (same as Meralco)
-    - Does NOT write :64: available balance in no-movement case
-    - Closing balance sign check uses curOpeningBal (VB6 Line 925)
-    - Triggered by Format = 'B' in routing logic
-    """
     try:
         config = get_account_config(conn, account_no)
         if not config:
@@ -515,20 +474,6 @@ def process_mt940_converge(conn, counter: int, account_no: str, code: str,
 
 def process_mt940_swift(conn, counter: int, account_no: str, code: str,
                         prev_bus_date: datetime) -> Optional[str]:
-    """
-    SWIFT MT940 generator with file splitting — max 33 transactions per file.
-    VB6: ProcessMT940Swift (Lines 1001-1499)
-
-    Key differences from other variants:
-    - Splits into multiple files: AUB20881_{date}_{acct}_{ctr}_1, _2, ...
-    - First file uses :60F: and :62F: or :62M: if more files follow
-    - Intermediate files use :60M: (opening) and :62M: (closing)
-    - :28C: includes sequence: {counter+1:00000}/{seqnum}
-    - :61: does NOT include stmdate3 (MMDD) — only stmdate2 (YYMMDD)
-    - BIC code gets 'X' inserted after char 8 (same as process_mt940_new)
-    - refno truncation keeps LAST 15 chars (not first 16 like other variants)
-    - DB counter updated AFTER all files are written (not before)
-    """
     try:
         config = get_account_config(conn, account_no)
         if not config:

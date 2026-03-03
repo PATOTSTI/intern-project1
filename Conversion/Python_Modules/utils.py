@@ -1,12 +1,6 @@
-"""
-Utility functions — date formatting, string helpers, currency mapping, file ops.
-Mirrors VB6 built-ins: Format(), Mid(), Right(), Left(), Dir(), MkDir().
-"""
-
 import os
 from datetime import datetime
 from typing import Optional
-
 
 # ---------------------------------------------------------------------------
 # Currency

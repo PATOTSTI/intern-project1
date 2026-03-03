@@ -1,8 +1,3 @@
-"""
-Database module — all SQLite operations for the MT940 system.
-Replaces VB6 ADODB connections and Recordset usage with sqlite3.
-"""
-
 import os
 import sqlite3
 from typing import Optional, List, Any
@@ -13,10 +8,6 @@ from typing import Optional, List, Any
 # ---------------------------------------------------------------------------
 
 def ado_connect():
-    """
-    Open the SQLite database using the path stored in casarepconn.txt.
-    Mirrors VB6 ADO_Connect() — reads [CONNSTRING] section from config file.
-    """
     try:
         app_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         config_file = os.path.join(app_path, "Database_Config", "casarepconn.txt")
@@ -54,7 +45,7 @@ def close_connection(conn: sqlite3.Connection) -> None:
 # ---------------------------------------------------------------------------
 
 def execute_query(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Optional[sqlite3.Cursor]:
-    """Run a write query (INSERT/UPDATE/DELETE). Returns cursor or None on error."""
+    
     try:
         cursor = conn.cursor()
         cursor.execute(sql, params)
@@ -66,7 +57,6 @@ def execute_query(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Opt
 
 
 def fetch_one(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Optional[sqlite3.Row]:
-    """Run a read query and return a single row. Does NOT commit."""
     try:
         cursor = conn.cursor()
         cursor.execute(sql, params)
@@ -77,7 +67,6 @@ def fetch_one(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> Optiona
 
 
 def fetch_all(conn: sqlite3.Connection, sql: str, params: tuple = ()) -> List[sqlite3.Row]:
-    """Run a read query and return all rows. Does NOT commit."""
     try:
         cursor = conn.cursor()
         cursor.execute(sql, params)
@@ -114,7 +103,6 @@ def get_account_config(conn: sqlite3.Connection, account_no: str) -> Optional[sq
 
 
 def update_mt940_counter(conn: sqlite3.Connection, account_no: str, counter: int, date) -> bool:
-    """Increment the statement counter and record the processing date."""
     from datetime import datetime
     date_str = date.strftime("%Y-%m-%d") if isinstance(date, datetime) else str(date)
     sql = "UPDATE MT940 SET counter = ?, date = ? WHERE statementacctno = ?"
@@ -122,13 +110,11 @@ def update_mt940_counter(conn: sqlite3.Connection, account_no: str, counter: int
 
 
 def update_mt940_filename(conn: sqlite3.Connection, account_no: str, filename: str) -> bool:
-    """Store the generated filename back into the MT940 table."""
     sql = "UPDATE MT940 SET filename = ? WHERE statementacctno = ?"
     return execute_query(conn, sql, (filename, account_no)) is not None
 
 
 def check_processing_flag(conn: sqlite3.Connection) -> bool:
-    """Returns True if the MT940 sentflag is '0' (not yet processed today)."""
     result = fetch_one(conn, "SELECT sentflag FROM codetable WHERE emailreport = 'MT940'")
     if result:
         return result['sentflag'] in ('0', 0)
@@ -141,11 +127,6 @@ def check_processing_flag(conn: sqlite3.Connection) -> bool:
 
 def get_account_transactions(conn: sqlite3.Connection, account_no: str,
                              txn_date: str) -> List[sqlite3.Row]:
-    """
-    Fetch transactions for an account on a specific date, joined with tlf_copy.
-    txn_date must be YYYYMMDD (e.g. '20260210').
-    Ordered by passbk_recno to match VB6 output order.
-    """
     sql = """
         SELECT h.acctno, h.txn_date, h.txntype, h.mnem_code,
                h.txnamt, h.ledger_bal, h.refno, h.passbk_recno,
@@ -159,7 +140,6 @@ def get_account_transactions(conn: sqlite3.Connection, account_no: str,
 
 
 def get_swift_trancode(conn: sqlite3.Connection, mnem_code: str) -> str:
-    """Look up the SWIFT transaction code for a mnemonic. Returns 'NMSC' if not mapped."""
     sql = "SELECT swift_trancode FROM casaSwiftTrancodeMap WHERE mnem_code = ?"
     result = fetch_one(conn, sql, (mnem_code,))
     return result['swift_trancode'] if result else "NMSC"
@@ -222,11 +202,6 @@ def get_summary_report(conn: sqlite3.Connection) -> List[sqlite3.Row]:
 # ---------------------------------------------------------------------------
 
 class Recordset:
-    """
-    Thin wrapper around a SQLite cursor that mimics VB6 Recordset navigation.
-    Supports: eof, move_next(), rs["fieldname"]
-    """
-
     def __init__(self, conn: sqlite3.Connection, sql: str, params: tuple = ()):
         self.cursor = conn.cursor()
         self.cursor.execute(sql, params)

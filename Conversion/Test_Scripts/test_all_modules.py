@@ -1,21 +1,4 @@
-"""
-test_all_modules.py — Single comprehensive test for the MT940 system.
-
-Covers:
-  Section 1  : Module imports
-  Section 2  : Database connection + schema check
-  Section 3  : Utility functions  (utils.py)
-  Section 4  : Database queries   (database.py)
-  Section 5  : Email module       (email_sender.py)
-  Section 6  : MT940 processor signatures
-  Section 7  : MT940 processor live runs (all 4 processors)
-  Section 8  : Full main.py integration run
-  Section 9  : Post-run output verification
-  Summary    : Pass / Fail totals
-
-Usage:
-  python Test_Scripts\\test_all_modules.py
-"""
+""" test_all_modules.py — Single comprehensive test for the MT940 system. """
 
 import sys
 import os
